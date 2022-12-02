@@ -1,46 +1,46 @@
 use std::fs::File;
 use std::io::{self, prelude::*, BufReader};
-use std::cmp::max;
+use std::collections::BinaryHeap;
 
-fn part1() -> io::Result<()> {
-    let file = File::open("./src/day1.txt")?;
+fn part1() -> io::Result<BinaryHeap<i32>> {
+    let file = File::open("./src/day1.txt").unwrap();
     let reader = BufReader::new(file);
-    let mut elves = Vec::<i32>::new();
+    let mut elves = BinaryHeap::<i32>::new();
 
-    let mut idx: usize = 0;
-    let mut next_elf_please = true;
+    let mut elf_total = 0;
 
     for line in reader.lines() {
         let cal: Result<i32,_> = line?.parse::<i32>();
         match cal {
-            Ok(res) => 
-                if next_elf_please {
-                    elves.push(res);
-                    next_elf_please = false;
-                } else {
-                    elves[idx] += res;
-                },
-            _ => {idx += 1; next_elf_please = true},
+            Ok(res) => elf_total += res,
+            _ => {elves.push(elf_total); elf_total = 0},
         };
     }
 
-    let mut maxcal = 0;
-    for elf in elves {
-        maxcal = max(maxcal, elf);
+    if elf_total > 0 {
+        elves.push(elf_total);
     }
 
-    println!("Max calories: {}", maxcal);
+    println!("Max calories: {}", elves.peek().unwrap());
 
-    Ok(())
+    Ok(elves)
 }
 
-fn part2() -> io::Result<()> {
+fn part2(mut elves: BinaryHeap<i32>) -> io::Result<()> {
+    let mut total = 0;
+    for count in 0..3 {
+        let val = elves.pop().unwrap();
+        total += val;
+        println!("{}: {}", count, val);
+    }
+    println!("Total: {}", total);
+
     Ok(())
 }
 
 pub fn run_all () {
     println!("Day 1 Part 1:");
-    let _err = part1();
+    let res = part1().unwrap();
     println!("Day 1 Part 2:");
-    let _err = part2();
+    let _err = part2(res);
 }
