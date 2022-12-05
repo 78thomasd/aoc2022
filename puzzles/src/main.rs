@@ -1,7 +1,8 @@
 use std::time::Instant;
 //mod day1;
 //mod day2;
-mod day3;
+//mod day3;
+mod day4;
 mod utils;
 
 fn main() {
@@ -9,7 +10,8 @@ fn main() {
     let mut idx = 1;
     //days.push(day1::run as fn());
     //days.push(day2::run as fn());
-    days.push(day3::run as fn());
+    //days.push(day3::run as fn());
+    days.push(day4::run as fn());
 
     for day in days {
         println!(">>> START:   Day {}:", idx);
